@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  prometheus:
+    image: prom/prometheus
+    networks:
+      - general
+    command:
+      - '--web.listen-address=:9090'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+    depends_on:
+      - pushgateway
+    restart: unless-stopped
+    ports:
+      - 9090:9090
+    volumes:
+      - ./config/prometheus/config:/etc/prometheus
+      - prometheus-data:/prometheus
+
+  pushgateway:
+    image: dmathai/prom-pushgateway-ttl:latest
+    networks:
+      - general
+    command:
+      - '--web.listen-address=:9091'
+      - '--push.disable-consistency-check'
+      - '--persistence.interval=1m'
+      - '--metric.timetolive=20s'
+    restart: unless-stopped
+    ports:
+      - 9091:9091
+
+  grafana:  
+    image: grafana/grafana
+    networks:
+      - general
+    depends_on:
+      - prometheus
+    ports:
+      - 9092:3000
+    restart: unless-stopped
+    volumes:
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+
+volumes:
+    grafana-data:
+    prometheus-data:
+
+networks:
+  general:

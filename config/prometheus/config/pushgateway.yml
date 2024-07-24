@@ -1,0 +1,4 @@
+- targets:
+  - "pushgateway:9091"
+  labels:
+    service: 'pushgateway'
