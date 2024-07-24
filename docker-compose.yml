@@ -6,10 +6,10 @@ services:
     networks:
       - general
     command:
-      - '--web.listen-address=:9090'
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - "--web.listen-address=:9090"
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
     depends_on:
       - pushgateway
     restart: unless-stopped
@@ -24,15 +24,15 @@ services:
     networks:
       - general
     command:
-      - '--web.listen-address=:9091'
-      - '--push.disable-consistency-check'
-      - '--persistence.interval=1m'
-      - '--metric.timetolive=20s'
+      - "--web.listen-address=:9091"
+      - "--push.disable-consistency-check"
+      - "--persistence.interval=1m"
+      - "--metric.timetolive=20s"
     restart: unless-stopped
     ports:
       - 9091:9091
 
-  grafana:  
+  grafana:
     image: grafana/grafana
     networks:
       - general
@@ -48,9 +48,19 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
 
+  docker-stats-exporter:
+    image: wywywywy/docker_stats_exporter:latest
+    networks:
+      - general
+    restart: unless-stopped
+    ports:
+      - "9093:9487"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
 volumes:
-    grafana-data:
-    prometheus-data:
+  grafana-data:
+  prometheus-data:
 
 networks:
   general:

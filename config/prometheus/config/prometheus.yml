@@ -6,21 +6,30 @@ rule_files: # 如果有使用 Alert，可用此關鍵字導入規則檔案
 alerting:
   alertmanagers:
     - static_configs:
-      - targets:
-        - alertmanager:9093
+        - targets:
+            - alertmanager:9093
 scrape_configs:
-  - job_name: 'pushgateway'
+  - job_name: "pushgateway"
     scrape_interval: 3s
     honor_labels: true
     metrics_path: /metrics
     scheme: http
     file_sd_configs:
       - files:
-        - /etc/prometheus/pushgateway.yml
+          - /etc/prometheus/pushgateway.yml
         refresh_interval: 3m
-  - job_name: 'prometheus'
+  - job_name: "docker-stats-exporter"
+    scrape_interval: 3s
+    honor_labels: true
+    metrics_path: /
+    scheme: http
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/docker-stats-exporter.yml
+        refresh_interval: 3m
+  - job_name: "prometheus"
     scrape_interval: 10s
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ["localhost:9090"]
         labels:
-          group: 'local'
+          group: "local"
