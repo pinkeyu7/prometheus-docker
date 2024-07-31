@@ -8,6 +8,7 @@
 | Prometheus Pushgateway | 9091 | [http://localhost:9091/](http://localhost:9091/) |
 | Grafana                | 9092 | [http://localhost:9092/](http://localhost:9092/) |
 | Docker Stats Exporter  | 9093 | [http://localhost:9093/](http://localhost:9093/) |
+| Jaeger                 | 9094 | [http://localhost:9094/](http://localhost:9094/) |
 
 ## Run
 

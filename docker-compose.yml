@@ -58,7 +58,22 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
 
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    networks:
+      - general
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    volumes:
+      - jaeger-data:/tmp
+    restart: unless-stopped
+    ports:
+      - "9094:16686"
+      - "4317:4317"
+      - "4318:4318"
+
 volumes:
+  jaeger-data:
   grafana-data:
   prometheus-data:
 
