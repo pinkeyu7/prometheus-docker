@@ -72,6 +72,13 @@ services:
       - "4317:4317"
       - "4318:4318"
 
+  plantuml-server:
+    image: plantuml/plantuml-server:jetty
+    networks:
+      - general
+    ports:
+      - 9095:8080
+
 volumes:
   jaeger-data:
   grafana-data:
